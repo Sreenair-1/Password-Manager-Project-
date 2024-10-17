@@ -7,14 +7,13 @@
 
 using namespace std;
 
-// Base class: Password
 class Password {
 protected:
-    string username;
+    string email;
     string password;
 
 public:
-    Password(const string& u, const string& p) : username(u), password(p) {}
+    Password(const string& e, const string& p) : email(e), password(p) {}
     virtual ~Password() {}
 
     virtual void display() const = 0;
@@ -23,14 +22,14 @@ public:
         return password;
     }
     
-    string getUsername() const {
-        return username;
+    string getemail() const {
+        return email;
     }
 
     virtual string toCSV() const = 0;
 
-    bool isUsername(const string& u) const {
-        return username == u;
+    bool isemail(const string& e) const {
+        return email == e;
     }
 };
 
@@ -39,14 +38,14 @@ private:
     string url;
 
 public:
-    WebsitePassword(const string& u, const string& p, const string& link) : Password(u, p), url(link) {}
+    WebsitePassword(const string& e, const string& p, const string& link) : Password(e, p), url(link) {}
 
     void display() const override {
-        cout << "Website: " << url << "\nUsername: " << username << "\nPassword: " << password << endl;
+        cout << "Website: " << url << "\nemail: " << email << "\nPassword: " << password << endl;
     }
 
     string toCSV() const override {
-        return "Website," + username + "," + password + "," + url + "\n";
+        return "Website," + email + "," + password + "," + url + "\n";
     }
 
     bool isUrl(const string& link) const {
@@ -63,14 +62,14 @@ private:
     string appName;
 
 public:
-    AppPassword(const string& u, const string& p, const string& app) : Password(u, p), appName(app) {}
+    AppPassword(const string& e, const string& p, const string& app) : Password(e, p), appName(app) {}
 
     void display() const override {
-        cout << "App: " << appName << "\nUsername: " << username << "\nPassword: " << password << endl;
+        cout << "App: " << appName << "\nemail: " << email << "\nPassword: " << password << endl;
     }
 
     string toCSV() const override {
-        return "App," + username + "," + password + "," + appName + "\n";
+        return "App," + email + "," + password + "," + appName + "\n";
     }
 
     bool isAppName(const string& app) const {
@@ -99,7 +98,7 @@ public:
     void saveToFile() const {
         ofstream file(filename);
         if (!file.is_open()) {
-            cerr << "Error: Could not open file for writing." << endl;
+            cout << "Error: Could not open file for writing." << endl;
             return;
         }
         for (const auto& pass : passwordList) {
@@ -112,7 +111,7 @@ public:
     void loadFromFile() {
         ifstream file(filename);
         if (!file.is_open()) {
-            cerr << "No password file found, starting fresh." << endl;
+            cout << "No password file found, starting fresh." << endl;
             return;
         }
 
@@ -137,16 +136,16 @@ public:
     }
 
     void searchPassword() const {
-        string username, identifier;
+        string email, identifier;
 
-        cout << "Enter username: ";
-        cin >> username;
+        cout << "Enter email: ";
+        cin >> email;
         cout << "Enter app name or URL: ";
         cin >> identifier;
 
         bool found = false;
         for (const auto& pass : passwordList) {
-            if (pass->isUsername(username)) {
+            if (pass->isemail(email)) {
                 if (auto webPass = dynamic_cast<WebsitePassword*>(pass.get())) {
                     if (webPass->isUrl(identifier)) {
                         webPass->display();
@@ -165,6 +164,7 @@ public:
             cout << "No matching password found." << endl;
         }
     }
+
 };
 
 int main() {
