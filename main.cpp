@@ -174,9 +174,10 @@ int main() {
         int choice;
         cout<<"Enter choice\n";
         cout<<"1. Enter Password\n2. Search Password\n3. Update Password\n4. Delete Password\n";
+        cin>>choice;
+        string email, password, type, extra;
         switch(choice){
             case 1:
-                string email, password, type, extra;
                 cout << "Enter email: ";
                 cin >> email;
                 cout << "Enter password: ";
@@ -194,6 +195,9 @@ int main() {
                     cout << "Invalid type." << endl;
                 }
                 break;
+            default:
+            cout<<"Program is being terminated....";
+            exit(0);
         }
     }
 
