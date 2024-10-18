@@ -111,8 +111,10 @@ public:
 
     void loadFromFile() {
         ifstream file(filename);
-        if (!file.is_open()) {
+        if (!(file.is_open())) {
             cout << "No password file found, starting fresh." << endl;
+            ofstream newFile(filename);
+            
             return;
         }
 
