@@ -173,7 +173,28 @@ int main() {
     while(true){
         int choice;
         cout<<"Enter choice\n";
-        cout<<"1. Enter Password\n2. Search Password\n3.";
+        cout<<"1. Enter Password\n2. Search Password\n3. Update Password\n4. Delete Password\n";
+        switch(choice){
+            case 1:
+                string email, password, type, extra;
+                cout << "Enter email: ";
+                cin >> email;
+                cout << "Enter password: ";
+                cin >> password;
+                cout << "Enter type (Website/App): ";
+                cin >> type;
+                cout << "Enter URL/App name: ";
+                cin >> extra;
+
+                if (type == "Website") {
+                    manager.addPassword(make_shared<WebsitePassword>(email, password, extra));
+                } else if (type == "App") {
+                    manager.addPassword(make_shared<AppPassword>(email, password, extra));
+                } else {
+                    cout << "Invalid type." << endl;
+                }
+                break;
+        }
     }
 
     return 0;
