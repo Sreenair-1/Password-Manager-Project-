@@ -170,6 +170,11 @@ public:
 int main() {
     PasswordManager manager;
     
+    while(true){
+        int choice;
+        cout<<"Enter choice\n";
+        cout<<"1. Enter Password\n2. Search Password\n3.";
+    }
 
     return 0;
 }
