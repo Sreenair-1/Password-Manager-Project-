@@ -93,6 +93,7 @@ public:
 
     void addPassword(shared_ptr<Password> pass) {
         passwordList.push_back(pass);
+        saveToFile();
     }
 
     void saveToFile() const {
@@ -165,6 +166,40 @@ public:
         }
     }
 
+    void update(){
+        string email, identifier, newPass;
+
+        cout << "Enter email: ";
+        cin >> email;
+        cout << "Enter app name or URL: ";
+        cin >> identifier;
+        cout << "Enter new password: ";
+        cin >> newPass;
+
+        bool found = false;
+        for (const auto& pass : passwordList) {
+            if (pass->isemail(email)) {
+                if (auto webPass = dynamic_cast<WebsitePassword*>(pass.get())) {
+                    if (webPass->isUrl(identifier)) {
+                        webPass->display();
+                        webPass->display();
+                        found = true;
+                    }
+                } else if (auto appPass = dynamic_cast<AppPassword*>(pass.get())) {
+                    if (appPass->isAppName(identifier)) {
+                        appPass->display();
+                        appPass->display();
+                        found = true;
+                    }
+                }
+            }
+        }
+
+        if (!found) {
+            cout << "No matching password found." << endl;
+        }
+    }
+
 };
 
 int main() {
@@ -172,8 +207,8 @@ int main() {
     
     while(true){
         int choice;
-        cout<<"Enter choice\n";
-        cout<<"1. Enter Password\n2. Search Password\n3. Update Password\n4. Delete Password\n";
+        cout<<"\nEnter choice\n\n";
+        cout<<"1. Enter Password\n2. Search Password\n3. Update Password\n4. Delete Password\nPress any other key to exit\n";
         cin>>choice;
         string email, password, type, extra;
         switch(choice){
