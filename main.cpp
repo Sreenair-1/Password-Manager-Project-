@@ -192,7 +192,6 @@ public:
         cout << "Passwords loaded from " << filename << endl;
     }
 
-
     void searchPassword() const
     {
         string email, identifier;
