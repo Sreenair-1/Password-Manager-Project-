@@ -1,9 +1,11 @@
 #include <iostream>
+#include <conio.h>
 #include <string>
 #include <vector>
 #include <memory>
 #include <fstream>
 #include <sstream>
+#include <algorithm>    
 
 using namespace std;
 
@@ -24,16 +26,6 @@ public:
         return newPass;
     }
 
-    string getPassword() const
-    {
-        return password;
-    }
-
-    string getemail() const
-    {
-        return email;
-    }
-
     virtual string toCSV() const = 0;
 
     bool isemail(const string &e) const
@@ -52,12 +44,12 @@ public:
 
     void display() const override
     {
-        cout << "Website: " << url << "\nemail: " << email << "\nPassword: " << password << endl;
+        cout << "Website: " << url << "\nemail: " << email << "\nPassword: " << password << "\n";
     }
 
     string toCSV() const override
     {
-        return "Website," + email + "," + password + "," + url + "\n";
+        return "Website," + email + "," + url + "," + password + "\n";
     }
 
     bool isUrl(const string &link) const
@@ -65,10 +57,6 @@ public:
         return url == link;
     }
 
-    string getUrl() const
-    {
-        return url;
-    }
 };
 
 class AppPassword : public Password
@@ -81,12 +69,12 @@ public:
 
     void display() const override
     {
-        cout << "App: " << appName << "\nemail: " << email << "\nPassword: " << password << endl;
+        cout << "\n\tApp: " << appName << "\n\temail: " << email << "\n\tPassword: " << password << "\n";
     }
 
     string toCSV() const override
     {
-        return "App," + email + "," + password + "," + appName + "\n";
+        return "App," + email + "," + appName + "," + password + "\n";
     }
 
     bool isAppName(const string &app) const
@@ -94,10 +82,6 @@ public:
         return appName == app;
     }
 
-    string getAppName() const
-    {
-        return appName;
-    }
 };
 
 class PasswordManager
@@ -138,7 +122,7 @@ public:
     }
 
     void addPassword(shared_ptr<Password> pass)
-    {
+    {   
         passwordList.push_back(pass);
         saveToFile();
     }
@@ -148,7 +132,7 @@ public:
         ofstream file(filename);
         if (!file.is_open())
         {
-            cout << "Error: Could not open file for writing." << endl;
+            cout << "Error: Could not open file for writing." << "\n";
             return;
         }
         for (const auto &pass : passwordList)
@@ -156,7 +140,7 @@ public:
             file << pass->toCSV();
         }
         file.close();
-        cout << "Passwords have been saved." << endl;
+        cout << "Passwords have been saved." << "\n";
     }
 
     void loadFromFile()
@@ -164,7 +148,7 @@ public:
         ifstream file(filename);
         if (!(file.is_open()))
         {
-            cout << "No password file found, starting fresh." << endl;
+            cout << "No password file found, starting fresh." << "\n";
             return;
         }
 
@@ -189,7 +173,7 @@ public:
             }
         }
         file.close();
-        cout << "Passwords loaded from " << filename << endl;
+        cout << "Passwords loaded from " << filename << "\n";
     }
 
     void searchPassword() const
@@ -207,7 +191,7 @@ public:
             pass->display();
             return;
         }
-        cout << "No matching password found." << endl;
+        cout << "No matching password found." << "\n";
     }
 
     void update()
@@ -218,18 +202,18 @@ public:
         cin >> email;
         cout << "Enter app name or URL: ";
         cin >> identifier;
-        cout << "Enter new password: ";
+        cout << "Enter new password(NO COMMAS): ";
         cin >> newPass;
 
         auto pass = findPassword(email, identifier);
         if (pass)
         {
             pass->setPassword(newPass);
-            cout << "Password was updated successfully." << endl;
+            cout << "Password was updated successfully." << "\n";
             return;
         }
 
-        cout << "No matching password was found." << endl;
+        cout << "No matching password was found." << "\n";
     }
 
     void deletePassword()
@@ -245,10 +229,10 @@ public:
         {
             passwordList.erase(remove(passwordList.begin(), passwordList.end(), pass), passwordList.end());
             saveToFile();
-            cout << "Password was deleted successfully." << endl;
+            cout << "\nPassword was deleted successfully." << "\n";
             return;
         }
-        cout << "No matching password found." << endl;
+        cout << "\nNo matching password found." << "\n";
     }
 };
 
@@ -268,12 +252,12 @@ int main()
         case 1:
             cout << "Enter email: ";
             cin >> email;
-            cout << "Enter password: ";
-            cin >> password;
             cout << "Enter type (Website/App): ";
             cin >> type;
             cout << "Enter URL/App name: ";
             cin >> extra;
+            cout << "Enter password: ";
+            cin >> password;
 
             if (type == "Website" || type == "website")
             {
@@ -285,7 +269,7 @@ int main()
             }
             else
             {
-                cout << "Invalid type." << endl;
+                cout << "Invalid type." << "\n";
             }
             break;
         case 2:
@@ -299,9 +283,9 @@ int main()
             break;
         default:
             cout << "Program is being terminated....";
-            exit(0);
+            return 0;
         }
+        getch();
     }
-
     return 0;
 }
