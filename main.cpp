@@ -1,11 +1,10 @@
 #include <iostream>
 #include <conio.h>
 #include <string>
-#include <vector>
+#include <list>
 #include <memory>
 #include <fstream>
-#include <sstream>
-#include <algorithm>    
+#include <sstream>  
 
 using namespace std;
 
@@ -87,7 +86,7 @@ public:
 class PasswordManager
 {
 private:
-    vector<shared_ptr<Password>> passwordList;
+    list<shared_ptr<Password>> passwordList;
     const string filename = "passwords.csv";
 
     shared_ptr<Password> findPassword(const string &email, const string &identifier) const
@@ -207,7 +206,8 @@ public:
 
         auto pass = findPassword(email, identifier);
         if (pass)
-        {
+        {   
+            passwordList.remove(pass);
             pass->setPassword(newPass);
             cout << "Password was updated successfully." << "\n";
             return;
@@ -227,7 +227,7 @@ public:
         auto pass = findPassword(email, identifier);
         if (pass)
         {
-            passwordList.erase(remove(passwordList.begin(), passwordList.end(), pass), passwordList.end());
+            passwordList.remove(pass);
             saveToFile();
             cout << "\nPassword was deleted successfully." << "\n";
             return;
